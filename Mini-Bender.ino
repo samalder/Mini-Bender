@@ -1,11 +1,13 @@
 //Libraries
 #include <Wirefeed.h>
+#include <Bender.h>
 
 //Pin Map
 #include "pinmap.h"
 
 //Instantiations
 Wirefeed wirefeed(feedStep, feedDir);
+Bender bender(bendStep, bendDir, sol);
 
 //Operational Variables
 
@@ -32,33 +34,44 @@ void setup() {
 
 void loop() {
   wirefeed.update();
+  bender.update();
 }
 
 void serialEvent() {
   if (Serial.available()) {
-   int code = Serial.read() - 48;
+   int code = Serial.read();
    switch (code) {
-    case 1:
+    case '1':
       wirefeed.on();
+      digitalWrite(sol,HIGH);
       break;
-    case 2:
+    case '2':
       wirefeed.off();
       break;
-    case 3:
+    case '3':
       wirefeed.setTimeStep(10);
       break;
-    case 4:
+    case '4':
       wirefeed.setTimeStep(20);
       break;
-    case 5:
+    case '5':
       wirefeed.setDirection(1);
       break;
-    case 6:
+    case '6':
       wirefeed.setDirection(0);
       break;
-    case 7:
+    case '7':
       wirefeed.setFeedLength(1000);
-      wirefeed.on();
+      break;
+    case '8':
+      bender.on();
+      break;
+    case '9':
+      bender.setBendAngle(100);
+      break;
+    case 'A':
+      if (bender.solenoidOn) {bender.setSolenoid(0);}
+      else {bender.setSolenoid(1);}
       break;
     default:
       Serial.println("what?");

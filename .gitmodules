@@ -1,3 +1,6 @@
 [submodule "Wirefeed"]
 	path = Wirefeed
 	url = https://github.com/samalder/Wirefeed.git
+[submodule "Bender"]
+	path = Bender
+	url = https://github.com/samalder/Bender.git
