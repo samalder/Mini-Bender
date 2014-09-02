@@ -1,0 +1,3 @@
+[submodule "Wirefeed"]
+	path = Wirefeed
+	url = https://github.com/samalder/Wirefeed.git
