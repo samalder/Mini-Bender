@@ -8,12 +8,6 @@
 Wirefeed wirefeed(feedStep, feedDir);
 
 //Operational Variables
-//---IO
-int const opCodeLen = 8;
-int opCode[opCodeLen];
-
-//---Error detection
-int errorCode = 0;
 
 void setup() {
   //Pin Initialization
@@ -30,11 +24,6 @@ void setup() {
   digitalWrite(sol, LOW);
   //note: solenoid rises when sol is HIGH
   
-  //Initialize the Input buffer
-for (int i = 0; i < opCodeLen; i++) {
-  opCode[i] = 0;
-}
-  
   //Serial Comms Initialization
   Serial.begin(9600);
   Serial.println("Mini-Bender Online");
@@ -42,6 +31,38 @@ for (int i = 0; i < opCodeLen; i++) {
 }
 
 void loop() {
-  rcvSerial();
   wirefeed.update();
+}
+
+void serialEvent() {
+  if (Serial.available()) {
+   int code = Serial.read() - 48;
+   switch (code) {
+    case 1:
+      wirefeed.on();
+      break;
+    case 2:
+      wirefeed.off();
+      break;
+    case 3:
+      wirefeed.setTimeStep(10);
+      break;
+    case 4:
+      wirefeed.setTimeStep(20);
+      break;
+    case 5:
+      wirefeed.setDirection(1);
+      break;
+    case 6:
+      wirefeed.setDirection(0);
+      break;
+    case 7:
+      wirefeed.setFeedLength(1000);
+      wirefeed.on();
+      break;
+    default:
+      Serial.println("what?");
+      break;
+   } 
+  }
 }
